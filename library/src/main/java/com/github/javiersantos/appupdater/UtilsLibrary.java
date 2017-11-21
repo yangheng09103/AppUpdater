@@ -188,7 +188,11 @@ class UtilsLibrary {
 
         } finally {
             if (body != null) {
-                body.close();
+                try {
+                    body.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }    
             }
         }
 
