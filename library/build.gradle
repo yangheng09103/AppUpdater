@@ -11,7 +11,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 25
         versionCode 25
-        versionName "2.6.3"
+        versionName "2.6.4"
     }
 
     buildTypes {
