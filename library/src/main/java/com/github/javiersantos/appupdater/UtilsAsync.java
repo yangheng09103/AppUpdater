@@ -63,37 +63,41 @@ class UtilsAsync {
 
         @Override
         protected Update doInBackground(Void... voids) {
-            if (updateFrom == UpdateFrom.XML || updateFrom == UpdateFrom.JSON) {
-                Update update = UtilsLibrary.getLatestAppVersion(updateFrom, xmlOrJsonUrl);
-                if (update != null) {
-                    return update;
-                } else {
-                    AppUpdaterError error = updateFrom == UpdateFrom.XML ? AppUpdaterError.XML_ERROR
-                            : AppUpdaterError.JSON_ERROR;
+            try {
+                if (updateFrom == UpdateFrom.XML || updateFrom == UpdateFrom.JSON) {
+                    Update update = UtilsLibrary.getLatestAppVersion(updateFrom, xmlOrJsonUrl);
+                    if (update != null) {
+                        return update;
+                    } else {
+                        AppUpdaterError error = updateFrom == UpdateFrom.XML ? AppUpdaterError.XML_ERROR
+                                : AppUpdaterError.JSON_ERROR;
 
-                    if (listener != null) {
-                        listener.onFailed(error);
+                        if (listener != null) {
+                            listener.onFailed(error);
+                        }
+                        cancel(true);
+                        return null;
                     }
-                    cancel(true);
-                    return null;
-                }
-            } else {
-                Context context = contextRef.get();
-                if (context != null) {
-                    return UtilsLibrary.getLatestAppVersionHttp(context, updateFrom, gitHub);
                 } else {
-                    cancel(true);
-                    return null;
+                    Context context = contextRef.get();
+                    if (context != null) {
+                        return UtilsLibrary.getLatestAppVersionHttp(context, updateFrom, gitHub);
+                    } else {
+                        cancel(true);
+                        return null;
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
             }
         }
 
         @Override
         protected void onPostExecute(Update update) {
             super.onPostExecute(update);
-
             if (listener != null) {
-                if (UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
+                if (update != null && UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
                     listener.onSuccess(update);
                 } else {
                     listener.onFailed(AppUpdaterError.UPDATE_VARIES_BY_DEVICE);
