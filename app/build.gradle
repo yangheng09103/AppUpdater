@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.github.javiersantos.appupdater.demo"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 4
         versionName "0.1"
