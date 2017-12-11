@@ -9,21 +9,17 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.github.javiersantos.appupdater.enums.Duration;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.github.javiersantos.appupdater.objects.GitHub;
 import com.github.javiersantos.appupdater.objects.Update;
 import com.github.javiersantos.appupdater.objects.Version;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -69,7 +65,8 @@ class UtilsLibrary {
         if (latestVersion.getLatestVersionCode() != null && latestVersion.getLatestVersionCode() > 0) {
             return latestVersion.getLatestVersionCode() > installedVersion.getLatestVersionCode();
         } else {
-            if (!TextUtils.equals(installedVersion.getLatestVersion(), "0.0.0.0") && !TextUtils.equals(latestVersion.getLatestVersion(), "0.0.0.0")) {
+            if (!TextUtils.equals(installedVersion.getLatestVersion(), "0.0.0.0") && !TextUtils
+                    .equals(latestVersion.getLatestVersion(), "0.0.0.0")) {
                 Version installed = new Version(installedVersion.getLatestVersion());
                 Version latest = new Version(latestVersion.getLatestVersion());
                 res = installed.compareTo(latest) < 0;
@@ -88,7 +85,8 @@ class UtilsLibrary {
         try {
             new URL(s);
             res = true;
-        } catch (MalformedURLException ignored) {}
+        } catch (MalformedURLException ignored) {
+        }
 
         return res;
     }
@@ -110,7 +108,8 @@ class UtilsLibrary {
 
         switch (updateFrom) {
             default:
-                res = String.format(Config.PLAY_STORE_URL, getAppPackageName(context), Locale.getDefault().getLanguage());
+                res = String
+                        .format(Config.PLAY_STORE_URL, getAppPackageName(context), Locale.getDefault().getLanguage());
                 break;
             case GITHUB:
                 res = Config.GITHUB_URL + gitHub.getGitHubUser() + "/" + gitHub.getGitHubRepo() + "/releases";
@@ -143,12 +142,15 @@ class UtilsLibrary {
 
         try {
             Response response = client.newCall(request).execute();
-            body = response.body();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(body.byteStream(), "UTF-8"));
+            ResponseBody responseBody = response.body();
+            body = responseBody;
+            BufferedReader reader = null;
+            if (body != null) {
+                reader = new BufferedReader(new InputStreamReader(body.byteStream(), "UTF-8"));
+            }
             StringBuilder str = new StringBuilder();
-
             String line;
-            while ((line = reader.readLine()) != null) {
+            while (reader != null && (line = reader.readLine()) != null) {
                 switch (updateFrom) {
                     default:
                         if (line.contains(Config.PLAY_STORE_TAG_RELEASE)) {
@@ -179,20 +181,21 @@ class UtilsLibrary {
             if (str.length() == 0) {
                 Log.e("AppUpdater", "Cannot retrieve latest version. Is it configured properly?");
             }
-
-            response.body().close();
+            if (responseBody != null) {
+                responseBody.close();
+            }
             source = str.toString();
         } catch (FileNotFoundException e) {
             Log.e("AppUpdater", "App wasn't found in the provided source. Is it published?");
-        } catch (IOException ignore) {
-
+        } catch (Exception ignore) {
+            ignore.printStackTrace();
         } finally {
             if (body != null) {
                 try {
                     body.close();
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                }    
+                }
             }
         }
 
@@ -264,7 +267,7 @@ class UtilsLibrary {
     }
 
     static Update getLatestAppVersion(UpdateFrom updateFrom, String url) {
-        if (updateFrom == UpdateFrom.XML){
+        if (updateFrom == UpdateFrom.XML) {
             RssParser parser = new RssParser(url);
             return parser.parse();
         } else {
