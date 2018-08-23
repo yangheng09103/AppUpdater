@@ -28,16 +28,11 @@ repositories {
 And add the library to your module **build.gradle**:
 ```Gradle
 dependencies {
-    compile 'com.github.javiersantos:AppUpdater:2.6.3'
+    implementation 'com.github.javiersantos:AppUpdater:2.7'
 }
 ```
 
 ## Usage
-Add **INTERNET** and **ACCESS_NETWORK_STATE** permissions to your app's Manifest:
-```xml
-<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-```
 
 ### Activity / Fragment
 By default, the basic usage will show a default dialog when a new version is found on the Play Store (otherwise nothing will be shown). By calling the `.start()` method, the library will work in background. You can cancel it at any time by calling `.stop()`. Other customizations are explained below.
@@ -90,7 +85,7 @@ When using GitHub you must provide the repo where the library will check for upd
 
 When using the XML source you must upload a .xml file somewhere on the Internet following the structure explained in the [wiki](https://github.com/javiersantos/AppUpdater/wiki/UpdateFrom.XML) and add the URL as shown in this example: `.setUpdateXML("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update-changelog.xml")`.
 
-When using the JSON source you must upload a .json file somewhere on the Internet following the structure explained in the [wiki](https://github.com/javiersantos/AppUpdater/wiki/UpdateFrom.JSON) and add the URL as shown in this example: `.setUpdateJSON("https://github.com/javiersantos/AppUpdater/wiki/UpdateFrom.JSON")`.
+When using the JSON source you must upload a .json file somewhere on the Internet following the structure explained in the [wiki](https://github.com/javiersantos/AppUpdater/wiki/UpdateFrom.JSON) and add the URL as shown in this example: `.setUpdateJSON("https://raw.githubusercontent.com/javiersantos/AppUpdater/master/app/update-changelog.json")`.
 
 A detailed description with examples is available at: https://github.com/javiersantos/AppUpdater/wiki
 

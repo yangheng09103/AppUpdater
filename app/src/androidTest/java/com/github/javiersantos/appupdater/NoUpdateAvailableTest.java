@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class NoUpdateAvailableTest {
@@ -25,7 +26,7 @@ public class NoUpdateAvailableTest {
     public UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
 
     @Test
-    public void updateAvailable_Basic_JSON() throws Throwable {
+    public void UpdateAvailable_Basic_JSON() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -43,7 +44,7 @@ public class NoUpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -55,7 +56,7 @@ public class NoUpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_VersionCode_JSON() throws Throwable {
+    public void UpdateAvailable_VersionCode_JSON() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -73,7 +74,7 @@ public class NoUpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -85,7 +86,7 @@ public class NoUpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_Basic_XML() throws Throwable {
+    public void UpdateAvailable_Basic_XML() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -103,7 +104,7 @@ public class NoUpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -115,7 +116,7 @@ public class NoUpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_VersionCode_XML() throws Throwable {
+    public void UpdateAvailable_VersionCode_XML() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -133,7 +134,7 @@ public class NoUpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })

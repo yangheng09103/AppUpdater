@@ -70,7 +70,7 @@ class UtilsAsync {
                         return update;
                     } else {
                         AppUpdaterError error = updateFrom == UpdateFrom.XML ? AppUpdaterError.XML_ERROR
-                                : AppUpdaterError.JSON_ERROR;
+                                                                             : AppUpdaterError.JSON_ERROR;
 
                         if (listener != null) {
                             listener.onFailed(error);
@@ -81,14 +81,14 @@ class UtilsAsync {
                 } else {
                     Context context = contextRef.get();
                     if (context != null) {
-                        return UtilsLibrary.getLatestAppVersionHttp(context, updateFrom, gitHub);
+                        return UtilsLibrary.getLatestAppVersionStore(context, updateFrom, gitHub);
                     } else {
                         cancel(true);
                         return null;
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                cancel(true);
                 return null;
             }
         }

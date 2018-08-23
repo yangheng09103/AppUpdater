@@ -24,7 +24,7 @@ public class UpdateAvailableTest {
     public UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
 
     @Test
-    public void updateAvailable_Basic_JSON() throws Throwable {
+    public void UpdateAvailable_Basic_JSON() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -42,7 +42,7 @@ public class UpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -54,7 +54,7 @@ public class UpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_VersionCode_JSON() throws Throwable {
+    public void UpdateAvailable_VersionCode_JSON() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -72,7 +72,7 @@ public class UpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -84,7 +84,7 @@ public class UpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_Basic_XML() throws Throwable {
+    public void UpdateAvailable_Basic_XML() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -102,7 +102,7 @@ public class UpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -114,7 +114,7 @@ public class UpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_VersionCode_XML() throws Throwable {
+    public void UpdateAvailable_VersionCode_XML() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -132,7 +132,7 @@ public class UpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
@@ -144,7 +144,7 @@ public class UpdateAvailableTest {
     }
 
     @Test
-    public void updateAvailable_GOOGLEPLAY() throws Throwable {
+    public void UpdateAvailable_GOOGLEPLAY() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
         uiThreadTestRule.runOnUiThread(new Runnable() {
@@ -161,7 +161,37 @@ public class UpdateAvailableTest {
 
                             @Override
                             public void onFailed(AppUpdaterError error) {
-                                assertNotNull(error);
+                                assertTrue("Failed", false);
+                                signal.countDown();
+                            }
+                        })
+                        .start();
+            }
+        });
+
+        signal.await(30, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void UpdateAvailable_JSON() throws Throwable {
+        final CountDownLatch signal = new CountDownLatch(1);
+
+        uiThreadTestRule.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AppUpdaterUtils(InstrumentationRegistry.getTargetContext())
+                        .setUpdateFrom(UpdateFrom.GITHUB)
+                        .setGitHubUserAndRepo("javiersantos", "AppUpdater")
+                        .withListener(new AppUpdaterUtils.UpdateListener() {
+                            @Override
+                            public void onSuccess(Update update, Boolean isUpdateAvailable) {
+                                assertTrue(isUpdateAvailable);
+                                signal.countDown();
+                            }
+
+                            @Override
+                            public void onFailed(AppUpdaterError error) {
+                                assertTrue("Failed", false);
                                 signal.countDown();
                             }
                         })
